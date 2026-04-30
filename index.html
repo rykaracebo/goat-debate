@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jordan vs LeBron: GOAT Debate Dashboard</title>
+  <style>
+    :root {
+      --ink: #161616;
+      --muted: #66615c;
+      --line: #ded8cf;
+      --paper: #fbfaf7;
+      --panel: #ffffff;
+      --bull: #c8102e;
+      --bull-dark: #7f1020;
+      --laker: #552583;
+      --gold: #fdb927;
+      --blue: #1f6feb;
+      --green: #188a55;
+      --shadow: 0 18px 60px rgba(24, 21, 18, .13);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.45;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(124, 10, 28, .92), rgba(26, 20, 60, .78) 51%, rgba(85, 37, 131, .94)),
+        radial-gradient(circle at 18% 24%, rgba(253, 185, 39, .42), transparent 23rem),
+        radial-gradient(circle at 86% 30%, rgba(255, 255, 255, .18), transparent 20rem),
+        #21171f;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 76px 76px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.9), transparent 88%);
+      pointer-events: none;
+    }
+
+    nav {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px clamp(18px, 4vw, 56px);
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .ball {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background:
+        linear-gradient(90deg, transparent 45%, rgba(0,0,0,.35) 46% 54%, transparent 55%),
+        linear-gradient(0deg, transparent 45%, rgba(0,0,0,.35) 46% 54%, transparent 55%),
+        #d96f26;
+      box-shadow: inset -8px -9px 0 rgba(0,0,0,.18);
+      flex: 0 0 auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a, .pill-button {
+      color: inherit;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.26);
+      background: rgba(255,255,255,.1);
+      border-radius: 999px;
+      padding: 9px 13px;
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      align-items: center;
+      gap: clamp(22px, 5vw, 72px);
+      padding: 28px clamp(18px, 5vw, 72px) 7vh;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 7.8rem);
+      line-height: .9;
+      margin: 0 0 18px;
+      max-width: 9ch;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 780px;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      color: rgba(255,255,255,.84);
+      margin: 0 0 24px;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .primary {
+      border: 0;
+      background: #fff;
+      color: #21171f;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 800;
+    }
+
+    .court {
+      min-height: 520px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.06) 49.7%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.06) 50.3%),
+        radial-gradient(circle at 50% 50%, transparent 0 70px, rgba(255,255,255,.2) 71px 73px, transparent 74px),
+        linear-gradient(90deg, rgba(200,16,46,.24), rgba(253,185,39,.18) 48%, rgba(85,37,131,.24));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .player-card {
+      position: absolute;
+      width: min(42%, 260px);
+      padding: 18px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.22);
+      backdrop-filter: blur(18px);
+    }
+
+    .player-card.jordan { left: 6%; top: 10%; }
+    .player-card.lebron { right: 6%; bottom: 10%; }
+    .jersey {
+      height: 150px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+    }
+    .jersey svg { width: 145px; height: 145px; filter: drop-shadow(0 18px 22px rgba(0,0,0,.25)); }
+    .player-card h2 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.1rem); }
+    .player-card p { margin: 3px 0 0; color: rgba(255,255,255,.75); }
+
+    main { padding: 42px clamp(16px, 4vw, 54px) 70px; }
+    section { max-width: 1240px; margin: 0 auto 42px; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+    h2.section-title { font-size: clamp(1.8rem, 4vw, 3rem); margin: 0; }
+    .note { color: var(--muted); max-width: 760px; margin: 0; }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 18px 0;
+    }
+    .segmented {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      background: #fff;
+    }
+    .segmented button {
+      border: 0;
+      background: transparent;
+      border-radius: 999px;
+      padding: 8px 13px;
+      color: var(--muted);
+    }
+    .segmented button.active {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .grid { display: grid; gap: 14px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(24, 21, 18, .06);
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .stat-label { color: var(--muted); font-size: .88rem; }
+    .stat-value { font-size: clamp(1.8rem, 4vw, 3.25rem); font-weight: 900; line-height: 1; margin-top: 8px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .mini-name { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); }
+    .tag { border-radius: 999px; padding: 4px 8px; color: #fff; font-weight: 800; font-size: .74rem; }
+    .tag.mj { background: var(--bull); }
+    .tag.lbj { background: var(--laker); }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 92px 1fr 76px;
+      gap: 12px;
+      align-items: center;
+      margin: 12px 0;
+    }
+    .track {
+      height: 12px;
+      border-radius: 999px;
+      background: #ebe5dc;
+      overflow: hidden;
+    }
+    .fill { height: 100%; border-radius: inherit; transition: width .35s ease; }
+    .fill.mj { background: linear-gradient(90deg, var(--bull), var(--bull-dark)); }
+    .fill.lbj { background: linear-gradient(90deg, var(--laker), var(--gold)); }
+
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; }
+    th, td { padding: 11px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    th { color: var(--muted); font-weight: 700; }
+    tbody tr:hover { background: #f5f1eb; }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(150px, 1fr));
+      overflow-x: auto;
+      gap: 12px;
+      padding-bottom: 8px;
+    }
+    .year {
+      min-height: 150px;
+      border-left: 4px solid var(--line);
+    }
+    .year.mj { border-color: var(--bull); }
+    .year.lbj { border-color: var(--laker); }
+    .year strong { display: block; font-size: 1.35rem; }
+    .year span { color: var(--muted); }
+
+    .debate-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .argument-list { padding: 0; list-style: none; margin: 0; display: grid; gap: 10px; }
+    .argument-list li {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .calculator {
+      display: grid;
+      grid-template-columns: minmax(260px, .9fr) minmax(0, 1.1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .slider-row { margin: 16px 0; }
+    .slider-row label { display: flex; justify-content: space-between; color: var(--muted); gap: 10px; }
+    input[type="range"] { width: 100%; accent-color: var(--ink); }
+    .scoreboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .score {
+      min-height: 200px;
+      display: grid;
+      align-content: center;
+      text-align: center;
+    }
+    .score .number { font-size: clamp(3rem, 8vw, 6rem); font-weight: 950; line-height: .95; }
+
+    .sources a { color: var(--blue); }
+    .footer {
+      max-width: 1240px;
+      margin: 38px auto 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid, .calculator, .debate-grid, .grid.two, .grid.three, .grid.four { grid-template-columns: 1fr; }
+      .court { min-height: 460px; }
+      .player-card { width: 44%; padding: 12px; }
+      .jersey { height: 110px; }
+      .jersey svg { width: 112px; height: 112px; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+
+    @media (max-width: 580px) {
+      nav { align-items: flex-start; flex-direction: column; }
+      .nav-links { justify-content: flex-start; }
+      .court { min-height: 390px; }
+      .player-card { width: 46%; }
+      .player-card h2 { font-size: 1.12rem; }
+      .player-card p { font-size: .82rem; }
+      .bar-row { grid-template-columns: 70px 1fr 54px; font-size: .82rem; }
+      th, td { padding: 9px 6px; font-size: .82rem; }
+      .split, .scoreboard { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <nav>
+      <div class="brand"><span class="ball" aria-hidden="true"></span><span>GOAT Debate Lab</span></div>
+      <div class="nav-links" aria-label="Page navigation">
+        <a href="#stats">Stats</a>
+        <a href="#playoffs">Playoffs</a>
+        <a href="#hardware">Hardware</a>
+        <a href="#judge">Judge</a>
+      </div>
+    </nav>
+    <div class="hero-grid">
+      <div>
+        <h1>Jordan vs LeBron</h1>
+        <p class="lead">An interactive, data-heavy dashboard for the basketball GOAT debate: peak scoring and Finals perfection against longevity, all-around production, and record-setting volume.</p>
+        <div class="hero-actions">
+          <a class="primary" href="#judge">Build your case</a>
+          <a class="pill-button" href="#sources">View sources</a>
+        </div>
+      </div>
+      <div class="court" aria-label="Stylized basketball court with Michael Jordan and LeBron James cards">
+        <article class="player-card jordan">
+          <div class="jersey" aria-hidden="true">
+            <svg viewBox="0 0 140 140" role="img">
+              <path d="M42 17h20c3 11 13 11 16 0h20l18 20-17 17v68H41V54L24 37z" fill="#f7f7f7"/>
+              <path d="M42 17h20c3 11 13 11 16 0h20l18 20-17 17v68H41V54L24 37z" fill="none" stroke="#c8102e" stroke-width="6"/>
+              <text x="70" y="66" text-anchor="middle" font-size="16" font-family="Arial" font-weight="900" fill="#c8102e">JORDAN</text>
+              <text x="70" y="101" text-anchor="middle" font-size="38" font-family="Arial" font-weight="900" fill="#161616">23</text>
+            </svg>
+          </div>
+          <h2>Michael Jordan</h2>
+          <p>6-0 Finals, 10 scoring titles, playoff PPG king</p>
+        </article>
+        <article class="player-card lebron">
+          <div class="jersey" aria-hidden="true">
+            <svg viewBox="0 0 140 140" role="img">
+              <path d="M42 17h20c3 11 13 11 16 0h20l18 20-17 17v68H41V54L24 37z" fill="#552583"/>
+              <path d="M42 17h20c3 11 13 11 16 0h20l18 20-17 17v68H41V54L24 37z" fill="none" stroke="#fdb927" stroke-width="6"/>
+              <text x="70" y="66" text-anchor="middle" font-size="15" font-family="Arial" font-weight="900" fill="#fdb927">JAMES</text>
+              <text x="70" y="101" text-anchor="middle" font-size="38" font-family="Arial" font-weight="900" fill="#fff">23</text>
+            </svg>
+          </div>
+          <h2>LeBron James</h2>
+          <p>All-time scoring leader, 4 Finals MVPs, 22 seasons</p>
+        </article>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="stats">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Regular Season Resume</h2>
+          <p class="note">LeBron figures are active-career numbers compiled through the 2025-26 regular season context available on April 30, 2026. Jordan numbers are final NBA career figures.</p>
+        </div>
+        <div class="segmented" role="group" aria-label="Regular season table mode">
+          <button class="active" data-table="perGame">Per game</button>
+          <button data-table="totals">Totals</button>
+          <button data-table="efficiency">Efficiency</button>
+        </div>
+      </div>
+
+      <div class="grid four" id="headlineStats"></div>
+      <div class="card" style="margin-top:14px; overflow:auto;">
+        <table>
+          <thead><tr id="statHead"></tr></thead>
+          <tbody id="statBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="playoffs">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Playoff Case</h2>
+          <p class="note">Jordan owns the highest career playoff scoring average in league history. LeBron owns unmatched playoff volume and has reached the Finals with three franchises.</p>
+        </div>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Playoff Averages</h3>
+          <div id="playoffBars"></div>
+        </div>
+        <div class="card" style="overflow:auto;">
+          <h3>Playoff Table</h3>
+          <table>
+            <thead><tr><th>Player</th><th>G</th><th>PPG</th><th>RPG</th><th>APG</th><th>SPG</th><th>BPG</th></tr></thead>
+            <tbody>
+              <tr><td>Michael Jordan</td><td>179</td><td>33.4</td><td>6.4</td><td>5.7</td><td>2.1</td><td>0.9</td></tr>
+              <tr><td>LeBron James</td><td>293</td><td>28.4</td><td>9.0</td><td>7.2</td><td>1.7</td><td>1.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="hardware">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Accomplishments</h2>
+          <p class="note">Hardware is where the debate splits cleanly: Jordan’s perfect Finals peak versus LeBron’s longer elite window and broader career totals.</p>
+        </div>
+      </div>
+      <div class="grid three" id="awardCards"></div>
+      <div class="timeline" style="margin-top:16px;">
+        <div class="card year mj"><strong>1988</strong><span>Jordan wins MVP, Defensive Player of the Year, scoring title, steals title.</span></div>
+        <div class="card year mj"><strong>1991-93</strong><span>First three-peat with three Finals MVPs.</span></div>
+        <div class="card year mj"><strong>1996-98</strong><span>Second three-peat and three more Finals MVPs.</span></div>
+        <div class="card year lbj"><strong>2012-13</strong><span>LeBron wins back-to-back MVPs, titles, and Finals MVPs.</span></div>
+        <div class="card year lbj"><strong>2016</strong><span>Leads Cleveland from 3-1 down against a 73-win Warriors team.</span></div>
+        <div class="card year lbj"><strong>2023-26</strong><span>Extends the scoring record and elite longevity into year 23.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Best Arguments</h2>
+          <p class="note">There is no single stat that decides this. The strongest cases depend on what you value.</p>
+        </div>
+      </div>
+      <div class="debate-grid">
+        <div class="card">
+          <h3>Jordan case</h3>
+          <ul class="argument-list">
+            <li><strong>Peak dominance:</strong> 10 scoring titles, 5 MVPs, 6 Finals MVPs, and the highest playoff PPG ever.</li>
+            <li><strong>Finals record:</strong> 6 championships in 6 Finals appearances, never pushed to Game 7 in the Finals.</li>
+            <li><strong>Two-way peak:</strong> 1988 MVP and DPOY, 9 All-Defensive First Team selections.</li>
+            <li><strong>Era control:</strong> the Bulls became the defining dynasty of the 1990s around his scoring pressure.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>LeBron case</h3>
+          <ul class="argument-list">
+            <li><strong>Longevity and volume:</strong> all-time regular-season scoring leader with elite play across 22 seasons and counting.</li>
+            <li><strong>All-around engine:</strong> top-tier scoring combined with historically rare passing, rebounding, and positional versatility.</li>
+            <li><strong>Playoff volume:</strong> more playoff games, points, rebounds, and assists than Jordan.</li>
+            <li><strong>Portability:</strong> titles and Finals MVPs with Miami, Cleveland, and Los Angeles.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="judge">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Build Your GOAT Formula</h2>
+          <p class="note">Adjust the weights. The calculator normalizes each category from the stats on this page, then shows which resume your formula prefers.</p>
+        </div>
+      </div>
+      <div class="calculator">
+        <div class="card" id="sliders"></div>
+        <div class="scoreboard">
+          <div class="card score">
+            <span class="tag mj" style="justify-self:center;">MJ</span>
+            <div class="number" id="mjScore">0</div>
+            <div>Michael Jordan</div>
+          </div>
+          <div class="card score">
+            <span class="tag lbj" style="justify-self:center;">LBJ</span>
+            <div class="number" id="lbjScore">0</div>
+            <div>LeBron James</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="sources">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Sources and Notes</h2>
+          <p class="note">Stats were rounded for display. Active-player figures can change after April 30, 2026.</p>
+        </div>
+      </div>
+      <div class="card">
+        <p>Sources used: Basketball-Reference/StatMuse career and playoff tables, NBA.com award and Finals MVP references, and NBA historical award records. Key public references include <a href="https://www.statmuse.com/nba/ask/michael-jordan-career-playoff-stats-totals">Jordan playoff totals</a>, <a href="https://www.statmuse.com/nba/ask/lebron-james-playoff-career-totals">LeBron playoff totals</a>, and <a href="https://www.nba.com/news/players-with-multiple-nba-finals-mvps">NBA.com Finals MVP list</a>.</p>
+        <p>Interpretation note: the page separates factual categories from the adjustable judge because “greatest” is a value judgment, not a solved equation.</p>
+      </div>
+    </section>
+    <div class="footer">Single-file dashboard. No external libraries, build tools, or network assets required.</div>
+  </main>
+
+  <script>
+    const players = {
+      mj: {
+        name: "Michael Jordan",
+        tag: "MJ",
+        cls: "mj",
+        regular: {
+          seasons: 15, games: 1072, ppg: 30.1, rpg: 6.2, apg: 5.3, spg: 2.3, bpg: 0.8,
+          points: 32292, rebounds: 6672, assists: 5633, steals: 2514, blocks: 893,
+          fg: 49.7, three: 32.7, ft: 83.5, ts: 56.9, per: 27.9
+        },
+        playoffs: { games: 179, ppg: 33.4, rpg: 6.4, apg: 5.7, spg: 2.1, bpg: 0.9 },
+        awards: { titles: 6, finalsMvp: 6, mvp: 5, allNba: 11, allDefense: 9, scoring: 10, allStar: 14, roy: 1, dpoy: 1 }
+      },
+      lbj: {
+        name: "LeBron James",
+        tag: "LBJ",
+        cls: "lbj",
+        regular: {
+          seasons: 23, games: 1560, ppg: 27.0, rpg: 7.5, apg: 7.4, spg: 1.5, bpg: 0.7,
+          points: 42184, rebounds: 11749, assists: 12016, steals: 2350, blocks: 1146,
+          fg: 50.6, three: 34.7, ft: 73.6, ts: 58.9, per: 27.1
+        },
+        playoffs: { games: 293, ppg: 28.4, rpg: 9.0, apg: 7.2, spg: 1.7, bpg: 1.0 },
+        awards: { titles: 4, finalsMvp: 4, mvp: 4, allNba: 21, allDefense: 6, scoring: 1, allStar: 22, roy: 1, dpoy: 0 }
+      }
+    };
+
+    const tableModes = {
+      perGame: ["Player", "Seasons", "Games", "PPG", "RPG", "APG", "SPG", "BPG"],
+      totals: ["Player", "PTS", "REB", "AST", "STL", "BLK", "Games", "Seasons"],
+      efficiency: ["Player", "FG%", "3P%", "FT%", "TS%", "PER", "PPG", "APG"]
+    };
+
+    const modeMap = {
+      perGame: p => [p.name, p.regular.seasons, p.regular.games, p.regular.ppg, p.regular.rpg, p.regular.apg, p.regular.spg, p.regular.bpg],
+      totals: p => [p.name, p.regular.points, p.regular.rebounds, p.regular.assists, p.regular.steals, p.regular.blocks, p.regular.games, p.regular.seasons],
+      efficiency: p => [p.name, p.regular.fg, p.regular.three, p.regular.ft, p.regular.ts, p.regular.per, p.regular.ppg, p.regular.apg]
+    };
+
+    const headline = [
+      ["Career PPG", "regular.ppg"],
+      ["Championships", "awards.titles"],
+      ["Finals MVPs", "awards.finalsMvp"],
+      ["All-NBA Teams", "awards.allNba"]
+    ];
+
+    const awards = [
+      ["NBA titles", "titles"], ["Finals MVP", "finalsMvp"], ["MVP", "mvp"],
+      ["All-NBA", "allNba"], ["All-Defense", "allDefense"], ["Scoring titles", "scoring"],
+      ["All-Star", "allStar"], ["Rookie of Year", "roy"], ["Defensive POY", "dpoy"]
+    ];
+
+    const weights = [
+      ["Peak scoring", "peak", { mj: players.mj.regular.ppg + players.mj.playoffs.ppg, lbj: players.lbj.regular.ppg + players.lbj.playoffs.ppg }, 24],
+      ["Longevity totals", "longevity", { mj: players.mj.regular.points + players.mj.regular.assists + players.mj.regular.rebounds, lbj: players.lbj.regular.points + players.lbj.regular.assists + players.lbj.regular.rebounds }, 24],
+      ["Playoff production", "playoffs", { mj: players.mj.playoffs.ppg * 1.4 + players.mj.playoffs.rpg + players.mj.playoffs.apg, lbj: players.lbj.playoffs.ppg * 1.4 + players.lbj.playoffs.rpg + players.lbj.playoffs.apg }, 20],
+      ["Championship hardware", "rings", { mj: players.mj.awards.titles * 2 + players.mj.awards.finalsMvp, lbj: players.lbj.awards.titles * 2 + players.lbj.awards.finalsMvp }, 18],
+      ["Two-way awards", "defense", { mj: players.mj.awards.allDefense + players.mj.awards.dpoy * 3 + players.mj.regular.steals / 1000, lbj: players.lbj.awards.allDefense + players.lbj.awards.dpoy * 3 + players.lbj.regular.steals / 1000 }, 14]
+    ];
+
+    const get = (obj, path) => path.split(".").reduce((acc, part) => acc[part], obj);
+    const fmt = value => typeof value === "number" ? value.toLocaleString(undefined, { maximumFractionDigits: 1 }) : value;
+
+    function renderHeadline() {
+      const wrap = document.getElementById("headlineStats");
+      wrap.innerHTML = headline.map(([label, path]) => {
+        const mj = get(players.mj, path);
+        const lbj = get(players.lbj, path);
+        return `<article class="card">
+          <div class="stat-label">${label}</div>
+          <div class="split">
+            <div><div class="mini-name"><span>Jordan</span><span class="tag mj">MJ</span></div><div class="stat-value">${fmt(mj)}</div></div>
+            <div><div class="mini-name"><span>LeBron</span><span class="tag lbj">LBJ</span></div><div class="stat-value">${fmt(lbj)}</div></div>
+          </div>
+        </article>`;
+      }).join("");
+    }
+
+    function renderTable(mode = "perGame") {
+      document.getElementById("statHead").innerHTML = tableModes[mode].map(h => `<th>${h}</th>`).join("");
+      document.getElementById("statBody").innerHTML = [players.mj, players.lbj].map(p => {
+        return `<tr>${modeMap[mode](p).map((v, index) => `<td>${index ? fmt(v) : v}</td>`).join("")}</tr>`;
+      }).join("");
+    }
+
+    function renderBars() {
+      const stats = [["PPG", "ppg"], ["RPG", "rpg"], ["APG", "apg"], ["SPG", "spg"], ["BPG", "bpg"]];
+      document.getElementById("playoffBars").innerHTML = stats.map(([label, key]) => {
+        const max = Math.max(players.mj.playoffs[key], players.lbj.playoffs[key]);
+        return `<div>
+          <div class="bar-row"><strong>${label}</strong><div class="track"><div class="fill mj" style="width:${players.mj.playoffs[key] / max * 100}%"></div></div><span>${players.mj.playoffs[key]}</span></div>
+          <div class="bar-row"><span> </span><div class="track"><div class="fill lbj" style="width:${players.lbj.playoffs[key] / max * 100}%"></div></div><span>${players.lbj.playoffs[key]}</span></div>
+        </div>`;
+      }).join("");
+    }
+
+    function renderAwards() {
+      document.getElementById("awardCards").innerHTML = awards.map(([label, key]) => {
+        const mj = players.mj.awards[key];
+        const lbj = players.lbj.awards[key];
+        const max = Math.max(mj, lbj, 1);
+        return `<article class="card">
+          <div class="stat-label">${label}</div>
+          <div class="bar-row"><span>Jordan</span><div class="track"><div class="fill mj" style="width:${mj / max * 100}%"></div></div><strong>${mj}</strong></div>
+          <div class="bar-row"><span>LeBron</span><div class="track"><div class="fill lbj" style="width:${lbj / max * 100}%"></div></div><strong>${lbj}</strong></div>
+        </article>`;
+      }).join("");
+    }
+
+    function renderSliders() {
+      const wrap = document.getElementById("sliders");
+      wrap.innerHTML = weights.map(([label, key,, initial]) => `<div class="slider-row">
+        <label for="${key}"><span>${label}</span><strong id="${key}Value">${initial}</strong></label>
+        <input id="${key}" type="range" min="0" max="40" value="${initial}" data-weight="${key}">
+      </div>`).join("");
+      wrap.querySelectorAll("input").forEach(input => input.addEventListener("input", calculateScores));
+      calculateScores();
+    }
+
+    function calculateScores() {
+      let mj = 0;
+      let lbj = 0;
+      weights.forEach(([,, values], index) => {
+        const key = weights[index][1];
+        const weight = Number(document.getElementById(key).value);
+        document.getElementById(`${key}Value`).textContent = weight;
+        const max = Math.max(values.mj, values.lbj);
+        mj += (values.mj / max) * weight;
+        lbj += (values.lbj / max) * weight;
+      });
+      const total = mj + lbj || 1;
+      document.getElementById("mjScore").textContent = Math.round(mj / total * 100);
+      document.getElementById("lbjScore").textContent = Math.round(lbj / total * 100);
+    }
+
+    document.querySelectorAll("[data-table]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-table]").forEach(b => b.classList.remove("active"));
+        button.classList.add("active");
+        renderTable(button.dataset.table);
+      });
+    });
+
+    renderHeadline();
+    renderTable();
+    renderBars();
+    renderAwards();
+    renderSliders();
+  </script>
+</body>
+</html>
