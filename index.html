@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jordan vs LeBron: GOAT Debate Dashboard</title>
+  <title>Michael Jordan vs LeBron James: GOAT Debate Dashboard</title>
   <style>
     :root {
       --ink: #161616;
@@ -120,7 +120,7 @@
       font-size: clamp(3rem, 8vw, 7.8rem);
       line-height: .9;
       margin: 0 0 18px;
-      max-width: 9ch;
+      max-width: 13ch;
       letter-spacing: 0;
     }
 
@@ -238,7 +238,7 @@
 
     .bar-row {
       display: grid;
-      grid-template-columns: 92px 1fr 76px;
+      grid-template-columns: minmax(132px, .34fr) 1fr 76px;
       gap: 12px;
       align-items: center;
       margin: 12px 0;
@@ -334,7 +334,7 @@
       .player-card { width: 46%; }
       .player-card h2 { font-size: 1.12rem; }
       .player-card p { font-size: .82rem; }
-      .bar-row { grid-template-columns: 70px 1fr 54px; font-size: .82rem; }
+      .bar-row { grid-template-columns: minmax(104px, .42fr) 1fr 54px; font-size: .82rem; }
       th, td { padding: 9px 6px; font-size: .82rem; }
       .split, .scoreboard { grid-template-columns: 1fr; }
     }
@@ -354,7 +354,7 @@
     </nav>
     <div class="hero-grid">
       <div>
-        <h1>Jordan vs LeBron</h1>
+        <h1>Michael Jordan vs LeBron James</h1>
         <p class="lead">An interactive, data-heavy dashboard for the basketball GOAT debate: peak scoring and Finals perfection against longevity, all-around production, and record-setting volume.</p>
         <div class="hero-actions">
           <a class="primary" href="#judge">Build your case</a>
@@ -395,7 +395,7 @@
       <div class="section-head">
         <div>
           <h2 class="section-title">Regular Season Resume</h2>
-          <p class="note">LeBron figures are active-career numbers compiled through the 2025-26 regular season context available on April 30, 2026. Jordan numbers are final NBA career figures.</p>
+          <p class="note">LeBron James figures are active-career numbers compiled through the 2025-26 regular season context available on April 30, 2026. Michael Jordan numbers are final NBA career figures.</p>
         </div>
         <div class="segmented" role="group" aria-label="Regular season table mode">
           <button class="active" data-table="perGame">Per game</button>
@@ -417,7 +417,7 @@
       <div class="section-head">
         <div>
           <h2 class="section-title">Playoff Case</h2>
-          <p class="note">Jordan owns the highest career playoff scoring average in league history. LeBron owns unmatched playoff volume and has reached the Finals with three franchises.</p>
+          <p class="note">Michael Jordan owns the highest career playoff scoring average in league history. LeBron James owns unmatched playoff volume and has reached the Finals with three franchises.</p>
         </div>
       </div>
       <div class="grid two">
@@ -441,15 +441,15 @@
     <section id="facts">
       <div class="section-head">
         <div>
-          <h2 class="section-title">Jordan Fun Facts</h2>
-          <p class="note">Three playoff details that explain why Jordan’s postseason case is so sticky in GOAT debates.</p>
+          <h2 class="section-title">Michael Jordan Fun Facts</h2>
+          <p class="note">Three playoff details that explain why Michael Jordan’s postseason case is so sticky in GOAT debates.</p>
         </div>
       </div>
       <div class="grid three">
         <article class="card">
           <div class="stat-label">Higher seed record</div>
           <div class="stat-value">24-0</div>
-          <p>Jordan’s Bulls never lost a playoff series when they entered as the higher seed.</p>
+          <p>Michael Jordan’s Bulls never lost a playoff series when they entered as the higher seed.</p>
         </article>
         <article class="card">
           <div class="stat-label">Finals elimination pressure</div>
@@ -468,15 +468,15 @@
       <div class="section-head">
         <div>
           <h2 class="section-title">Accomplishments</h2>
-          <p class="note">Hardware is where the debate splits cleanly: Jordan’s perfect Finals peak versus LeBron’s longer elite window and broader career totals.</p>
+          <p class="note">Hardware is where the debate splits cleanly: Michael Jordan’s perfect Finals peak versus LeBron James’s longer elite window and broader career totals.</p>
         </div>
       </div>
       <div class="grid three" id="awardCards"></div>
       <div class="timeline" style="margin-top:16px;">
-        <div class="card year mj"><strong>1988</strong><span>Jordan wins MVP, Defensive Player of the Year, scoring title, steals title.</span></div>
+        <div class="card year mj"><strong>1988</strong><span>Michael Jordan wins MVP, Defensive Player of the Year, scoring title, steals title.</span></div>
         <div class="card year mj"><strong>1991-93</strong><span>First three-peat with three Finals MVPs.</span></div>
         <div class="card year mj"><strong>1996-98</strong><span>Second three-peat and three more Finals MVPs.</span></div>
-        <div class="card year lbj"><strong>2012-13</strong><span>LeBron wins back-to-back MVPs, titles, and Finals MVPs.</span></div>
+        <div class="card year lbj"><strong>2012-13</strong><span>LeBron James wins back-to-back MVPs, titles, and Finals MVPs.</span></div>
         <div class="card year lbj"><strong>2016</strong><span>Leads Cleveland from 3-1 down against a 73-win Warriors team.</span></div>
         <div class="card year lbj"><strong>2023-26</strong><span>Extends the scoring record and elite longevity into year 23.</span></div>
       </div>
@@ -491,7 +491,7 @@
       </div>
       <div class="debate-grid">
         <div class="card">
-          <h3>Jordan case</h3>
+          <h3>Michael Jordan case</h3>
           <ul class="argument-list">
             <li><strong>Peak dominance:</strong> 10 scoring titles, 5 MVPs, 6 Finals MVPs, and the highest playoff PPG ever.</li>
             <li><strong>Finals record:</strong> 6 championships in 6 Finals appearances, never pushed to Game 7 in the Finals.</li>
@@ -500,11 +500,11 @@
           </ul>
         </div>
         <div class="card">
-          <h3>LeBron case</h3>
+          <h3>LeBron James case</h3>
           <ul class="argument-list">
             <li><strong>Longevity and volume:</strong> all-time regular-season scoring leader with elite play across 22 seasons and counting.</li>
             <li><strong>All-around engine:</strong> top-tier scoring combined with historically rare passing, rebounding, and positional versatility.</li>
-            <li><strong>Playoff volume:</strong> more playoff games, points, rebounds, and assists than Jordan.</li>
+            <li><strong>Playoff volume:</strong> more playoff games, points, rebounds, and assists than Michael Jordan.</li>
             <li><strong>Portability:</strong> titles and Finals MVPs with Miami, Cleveland, and Los Angeles.</li>
           </ul>
         </div>
@@ -515,22 +515,25 @@
       <div class="section-head">
         <div>
           <h2 class="section-title">Build Your GOAT Formula</h2>
-          <p class="note">Adjust the weights. The calculator normalizes each category from the stats on this page, then shows which resume your formula prefers.</p>
+          <p class="note">Adjust the category weights to create your own scoring model. The calculator normalizes each category from the stats on this page, then shows which resume your formula prefers.</p>
         </div>
       </div>
       <div class="calculator">
         <div class="card" id="sliders"></div>
         <div class="scoreboard">
           <div class="card score">
-            <span class="tag mj" style="justify-self:center;">MJ</span>
+            <span class="tag mj" style="justify-self:center;">Michael Jordan</span>
             <div class="number" id="mjScore">0</div>
-            <div>Michael Jordan</div>
+            <div>Formula score</div>
           </div>
           <div class="card score">
-            <span class="tag lbj" style="justify-self:center;">LBJ</span>
+            <span class="tag lbj" style="justify-self:center;">LeBron James</span>
             <div class="number" id="lbjScore">0</div>
-            <div>LeBron James</div>
+            <div>Formula score</div>
           </div>
+        </div>
+        <div class="card" style="grid-column: 1 / -1;">
+          <strong id="formulaResult">Adjust the weights to compare resumes.</strong>
         </div>
       </div>
     </section>
@@ -543,7 +546,7 @@
         </div>
       </div>
       <div class="card">
-        <p>Sources used: Basketball-Reference/StatMuse career and playoff tables, NBA.com award and Finals MVP references, and NBA historical award records. Key public references include <a href="https://www.statmuse.com/nba/ask/michael-jordan-career-playoff-stats-totals">Jordan playoff totals</a>, <a href="https://www.statmuse.com/nba/ask/lebron-james-playoff-career-totals">LeBron playoff totals</a>, and <a href="https://www.nba.com/news/players-with-multiple-nba-finals-mvps">NBA.com Finals MVP list</a>.</p>
+        <p>Sources used: Basketball-Reference/StatMuse career and playoff tables, NBA.com award and Finals MVP references, and NBA historical award records. Key public references include <a href="https://www.statmuse.com/nba/ask/michael-jordan-career-playoff-stats-totals">Michael Jordan playoff totals</a>, <a href="https://www.statmuse.com/nba/ask/lebron-james-playoff-career-totals">LeBron James playoff totals</a>, and <a href="https://www.nba.com/news/players-with-multiple-nba-finals-mvps">NBA.com Finals MVP list</a>.</p>
         <p>Interpretation note: the page separates factual categories from the adjustable judge because “greatest” is a value judgment, not a solved equation.</p>
       </div>
     </section>
@@ -622,8 +625,8 @@
         return `<article class="card">
           <div class="stat-label">${label}</div>
           <div class="split">
-            <div><div class="mini-name"><span>Jordan</span><span class="tag mj">MJ</span></div><div class="stat-value">${fmt(mj)}</div></div>
-            <div><div class="mini-name"><span>LeBron</span><span class="tag lbj">LBJ</span></div><div class="stat-value">${fmt(lbj)}</div></div>
+            <div><div class="mini-name"><span>Michael Jordan</span><span class="tag mj">MJ</span></div><div class="stat-value">${fmt(mj)}</div></div>
+            <div><div class="mini-name"><span>LeBron James</span><span class="tag lbj">LBJ</span></div><div class="stat-value">${fmt(lbj)}</div></div>
           </div>
         </article>`;
       }).join("");
@@ -654,8 +657,8 @@
         const max = Math.max(mj, lbj, 1);
         return `<article class="card">
           <div class="stat-label">${label}</div>
-          <div class="bar-row"><span>Jordan</span><div class="track"><div class="fill mj" style="width:${mj / max * 100}%"></div></div><strong>${mj}</strong></div>
-          <div class="bar-row"><span>LeBron</span><div class="track"><div class="fill lbj" style="width:${lbj / max * 100}%"></div></div><strong>${lbj}</strong></div>
+          <div class="bar-row"><span>Michael Jordan</span><div class="track"><div class="fill mj" style="width:${mj / max * 100}%"></div></div><strong>${mj}</strong></div>
+          <div class="bar-row"><span>LeBron James</span><div class="track"><div class="fill lbj" style="width:${lbj / max * 100}%"></div></div><strong>${lbj}</strong></div>
         </article>`;
       }).join("");
     }
@@ -682,8 +685,12 @@
         lbj += (values.lbj / max) * weight;
       });
       const total = mj + lbj || 1;
-      document.getElementById("mjScore").textContent = Math.round(mj / total * 100);
-      document.getElementById("lbjScore").textContent = Math.round(lbj / total * 100);
+      const mjScore = Math.round(mj / total * 100);
+      const lbjScore = Math.round(lbj / total * 100);
+      document.getElementById("mjScore").textContent = mjScore;
+      document.getElementById("lbjScore").textContent = lbjScore;
+      const leader = mjScore === lbjScore ? "The formula is tied." : `${mjScore > lbjScore ? "Michael Jordan" : "LeBron James"} leads this formula by ${Math.abs(mjScore - lbjScore)} points.`;
+      document.getElementById("formulaResult").textContent = leader;
     }
 
     document.querySelectorAll("[data-table]").forEach(button => {
