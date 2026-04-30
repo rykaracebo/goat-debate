@@ -309,6 +309,20 @@
       text-align: center;
     }
     .score .number { font-size: clamp(3rem, 8vw, 6rem); font-weight: 950; line-height: .95; }
+    .formula-breakdown {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .formula-breakdown-row {
+      display: grid;
+      grid-template-columns: minmax(132px, .7fr) 1fr 1fr;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .formula-breakdown-row strong { color: var(--ink); }
 
     .sources a { color: var(--blue); }
     .footer {
@@ -534,6 +548,7 @@
         </div>
         <div class="card" style="grid-column: 1 / -1;">
           <strong id="formulaResult">Adjust the weights to compare resumes.</strong>
+          <div class="formula-breakdown" id="formulaBreakdown"></div>
         </div>
       </div>
     </section>
@@ -673,24 +688,67 @@
       calculateScores();
     }
 
+    function safeNumber(value, fallback = 0) {
+      const number = Number(value);
+      return Number.isFinite(number) ? number : fallback;
+    }
+
+    function normalizedScore(value, max, weight) {
+      if (!Number.isFinite(value) || !Number.isFinite(max) || max <= 0 || weight <= 0) {
+        return 0;
+      }
+      return value / max * weight;
+    }
+
     function calculateScores() {
-      let mj = 0;
-      let lbj = 0;
-      weights.forEach(([,, values], index) => {
-        const key = weights[index][1];
-        const weight = Number(document.getElementById(key).value);
-        document.getElementById(`${key}Value`).textContent = weight;
-        const max = Math.max(values.mj, values.lbj);
-        mj += (values.mj / max) * weight;
-        lbj += (values.lbj / max) * weight;
+      let mjTotal = 0;
+      let lbjTotal = 0;
+      let activeWeight = 0;
+      const rows = [];
+
+      weights.forEach(([label, key, values, fallbackWeight]) => {
+        const input = document.getElementById(key);
+        const valueLabel = document.getElementById(`${key}Value`);
+        const weight = Math.max(0, safeNumber(input ? input.value : fallbackWeight, fallbackWeight));
+        const mjValue = safeNumber(values.mj);
+        const lbjValue = safeNumber(values.lbj);
+        const max = Math.max(mjValue, lbjValue, 0);
+        const mjCategory = normalizedScore(mjValue, max, weight);
+        const lbjCategory = normalizedScore(lbjValue, max, weight);
+
+        if (valueLabel) {
+          valueLabel.textContent = weight;
+        }
+
+        mjTotal += mjCategory;
+        lbjTotal += lbjCategory;
+        activeWeight += weight;
+        rows.push({ label, weight, mjCategory, lbjCategory });
       });
-      const total = mj + lbj || 1;
-      const mjScore = Math.round(mj / total * 100);
-      const lbjScore = Math.round(lbj / total * 100);
-      document.getElementById("mjScore").textContent = mjScore;
-      document.getElementById("lbjScore").textContent = lbjScore;
-      const leader = mjScore === lbjScore ? "The formula is tied." : `${mjScore > lbjScore ? "Michael Jordan" : "LeBron James"} leads this formula by ${Math.abs(mjScore - lbjScore)} points.`;
-      document.getElementById("formulaResult").textContent = leader;
+
+      const mjScore = activeWeight > 0 ? Math.round(mjTotal / activeWeight * 100) : 0;
+      const lbjScore = activeWeight > 0 ? Math.round(lbjTotal / activeWeight * 100) : 0;
+      document.getElementById("mjScore").textContent = Number.isFinite(mjScore) ? mjScore : 0;
+      document.getElementById("lbjScore").textContent = Number.isFinite(lbjScore) ? lbjScore : 0;
+
+      if (activeWeight <= 0) {
+        document.getElementById("formulaResult").textContent = "Set at least one category above 0 to calculate a formula score.";
+      } else if (mjScore === lbjScore) {
+        document.getElementById("formulaResult").textContent = "The formula is tied.";
+      } else {
+        const leader = mjScore > lbjScore ? "Michael Jordan" : "LeBron James";
+        document.getElementById("formulaResult").textContent = `${leader} leads this formula by ${Math.abs(mjScore - lbjScore)} points.`;
+      }
+
+      document.getElementById("formulaBreakdown").innerHTML = rows.map(row => {
+        const mjDisplay = activeWeight > 0 ? Math.round(row.mjCategory / activeWeight * 100) : 0;
+        const lbjDisplay = activeWeight > 0 ? Math.round(row.lbjCategory / activeWeight * 100) : 0;
+        return `<div class="formula-breakdown-row">
+          <strong>${row.label}</strong>
+          <span>Michael Jordan: ${mjDisplay}</span>
+          <span>LeBron James: ${lbjDisplay}</span>
+        </div>`;
+      }).join("");
     }
 
     document.querySelectorAll("[data-table]").forEach(button => {
